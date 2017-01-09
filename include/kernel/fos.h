@@ -20,6 +20,15 @@ extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
 
+
+/* Loop <delay> times in a way that the compiler won't optimize away. */
+static inline void delay(int32_t count)
+{
+	asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+		 : "=r"(count): [count]"0"(count) : "cc");
+}
+ 
+
 //------------------------------------------------GPIO.H
 
 
@@ -87,16 +96,103 @@ extern void dummy ( unsigned int );
 #define TEST  0x202000B0
 
 
-void pinMode(int gpio_pin, int state);
+void pinMode(
+			int gpio_pin
+			, int state
+			);
 
-void digitalWrite(int gpio_pin, int state);
+void digitalWrite	(
+					int gpio_pin
+					, int state
+					);
 
-int digitalRead(int gpio_pin);
+int digitalRead	(
+				int gpio_pin
+				);
+
+int eventRead	(
+				int gpio_pin
+				);
+
+int risingEdgeRead	(
+					int gpio_pin
+					);
+
+int fallingEdgeRead	(
+					int gpio_pin
+					);
+
+int highDetectRead	(
+					int gpio_pin
+					);
+
+int lowDetectRead	(
+					int gpio_pin
+					);
+
+int asyncRisingEdgeRead	(
+						int gpio_pin
+						);
+
+int asyncFallingEdgeDetectRead	(
+								int gpio_pin
+								);
+
+int pullUpDownRead();
+
+int pullUpDownClockRead	(
+						int gpio_pin
+						);
+
+void eventWrite(
+				int gpio_pin
+				, int value
+				);
+
+void risingEdgeWrite(
+					int gpio_pin
+					, int value
+					);
+
+void fallingEdgeWrite(
+					int gpio_pin
+					, int value
+					);
+
+void highDetectWrite(
+					int gpio_pin
+					, int value
+					);
+
+void lowDetectWrite(
+					int gpio_pin
+					, int value
+					);
+
+void asyncRisingEdgeWrite(
+						int gpio_pin
+						, int value
+						);
+
+void asyncFallingEdgeDetectWrite(
+								int gpio_pin
+								, int value
+								);
+
+void pullUpDownWrite(
+					int value
+					);
+
+void pullUpDownClockWrite	(
+							int gpio_pin
+							, int value
+							);
 
 void gpio_install();
 
 //------------------------------------------------UART.H
 
+#define AUX_IRQ 		0x20215000
 #define AUX_ENABLES     0x20215004
 #define AUX_MU_IO_REG   0x20215040
 #define AUX_MU_IER_REG  0x20215044
@@ -109,6 +205,9 @@ void gpio_install();
 #define AUX_MU_CNTL_REG 0x20215060
 #define AUX_MU_STAT_REG 0x20215064
 #define AUX_MU_BAUD_REG 0x20215068
+
+
+void mini_uart_install();
 
 
 #endif
