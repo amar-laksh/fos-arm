@@ -124,9 +124,13 @@ int digitalRead	(
 				int gpio_pin
 				)
 {
-	int a;
-	CHECK_ON_GPIO_PINS(GPLEV0, GPLEV1);
-	return (a & (1<<gpio_pin));
+	uint32_t a;
+	if(gpio_pin <= 31){
+		a = GET32(GPLEV0);
+	}else{
+		a  = GET32(GPLEV1);
+	}
+	return (a & (1<<(32-gpio_pin)));
 }
 
 

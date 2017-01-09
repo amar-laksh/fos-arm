@@ -216,4 +216,8 @@ void gpio_install();
 void mini_uart_install();
 
 
+//------------------------------------------------LCD.H
+
+void lcd_install();
+
 #endif
