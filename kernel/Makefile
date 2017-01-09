@@ -37,3 +37,9 @@ kernel.bin : $(OBJECTS)
 
 %.o: %.s
 	$(AS) $< -o $@
+
+kernel.elf : $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -lgcc
+
+run: kernel.elf
+	qemu-system-arm -kernel fos.elf -m 256 -M raspi2 -serial stdio

@@ -34,6 +34,12 @@ static inline void delay(int32_t count)
 
 #define OUTPUT 1
 #define INPUT 0
+#define ALT0 4
+#define ALT1 5
+#define ALT2 6
+#define ALT3 7
+#define ALT4 3
+#define ALT5 2
 
 #define HIGH 1
 #define LOW 0

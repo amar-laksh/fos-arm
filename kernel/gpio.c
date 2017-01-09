@@ -49,10 +49,46 @@ void pinMode(
 		ra|=1<<offset;
 		PUT32(SEL,ra);
 	}
-	else{
+	else if(state == 0 || state == INPUT){
 		ra=GET32(SEL);
 		ra&=~(7<<offset);
 		ra|=0<<offset;
+		PUT32(SEL,ra);
+	}
+	else if(state == 4 || state == ALT0){
+		ra=GET32(SEL);
+		ra&=~(7<<offset);
+		ra|=4<<offset;
+		PUT32(SEL,ra);
+	}
+	else if(state == 5 || state == ALT1){
+		ra=GET32(SEL);
+		ra&=~(7<<offset);
+		ra|=5<<offset;
+		PUT32(SEL,ra);
+	}
+	else if(state == 6 || state == ALT2){
+		ra=GET32(SEL);
+		ra&=~(7<<offset);
+		ra|=6<<offset;
+		PUT32(SEL,ra);
+	}
+	else if(state == 7 || state == ALT3){
+		ra=GET32(SEL);
+		ra&=~(7<<offset);
+		ra|=7<<offset;
+		PUT32(SEL,ra);
+	}
+	else if(state == 3 || state == ALT4){
+		ra=GET32(SEL);
+		ra&=~(7<<offset);
+		ra|=3<<offset;
+		PUT32(SEL,ra);
+	}
+	else if(state == 2 || state == ALT5){
+		ra=GET32(SEL);
+		ra&=~(7<<offset);
+		ra|=2<<offset;
 		PUT32(SEL,ra);
 	}
 }
