@@ -49,8 +49,7 @@ void pinMode(
 		ra|=1<<offset;
 		PUT32(SEL,ra);
 	}
-	else if(state == 0 || state == INPUT){
-		
+	else if(state == 0 || state == INPUT){		
 		ra=GET32(SEL);
 		ra&=~(7<<offset);
 		ra |= (0<<offset);
@@ -125,16 +124,14 @@ int digitalRead	(
 				int gpio_pin
 				)
 {
-	uint32_t a;
-	uint32_t value;
+	int value;
 	if(gpio_pin >= 0 && gpio_pin <= 31){
-		a = GET32(GPLEV0);
-		value = 1<<(gpio_pin);
+		
+		value =(GET32(GPLEV0) & (1<<(gpio_pin)) );
 	}else{
-		a  = GET32(GPLEV1);
-		value = 1<<(gpio_pin - 32);
+		value =(GET32(GPLEV1) & (1<<(gpio_pin - 32)) );
 	}
-	return (a & value);
+	return value;
 }
 
 
