@@ -10,7 +10,8 @@
 #define ARM_TIMER_CNT 0x2000B420
 
 #define SYSTIMERCLO 0x20003004
-
+#define OK_LED		35
+#define FAIL_LED	47
 //#define TIMEOUT 20000000
 #define TIMEOUT 2000000
 
