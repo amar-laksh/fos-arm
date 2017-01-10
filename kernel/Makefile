@@ -31,6 +31,7 @@ all : kernel.bin clean
 kernel.bin : $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -lgcc
 	$(OBJCOPY) fos.elf -O binary kernel.img
+	$(OBJCOPY) fos.elf -O binary kernel.bin
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@

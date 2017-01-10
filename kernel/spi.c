@@ -1,5 +1,6 @@
 #include <kernel/fos.h>
 
-void spi_install(){
+void spi_install()
+{
 	
 }

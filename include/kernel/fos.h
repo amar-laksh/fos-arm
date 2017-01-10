@@ -212,13 +212,42 @@ void gpio_install();
 #define AUX_MU_CNTL_REG 0x20215060
 #define AUX_MU_STAT_REG 0x20215064
 #define AUX_MU_BAUD_REG 0x20215068
-
+						
+#define UART_BASE		0x20201000
+#define UART_DR			0x20201000
+#define UART_RSRECR		0x20201004
+#define UART_FR			0x20201018
+#define UART_ILPR		0x20201020
+#define UART_IBRD		0x20201024
+#define UART_FBRD		0x20201028
+#define UART_LCRH		0x2020102C
+#define UART_CR			0x20201030
+#define UART_IFLS		0x20201034
+#define UART_IMSC		0x20201038
+#define UART_RIS		0x2020103C
+#define UART_MIS		0x20201040
+#define UART_ICR		0x20201044
+#define UART_DMACR		0x20201048
+#define UART_ITCR		0x20201080
+#define UART_ITIP		0x20201084
+#define UART_ITOP		0x20201088
+#define UART_TDR		0x2020108C
 
 void mini_uart_install();
 
+void uart_install();
 
 //------------------------------------------------LCD.H
 
 void lcd_install();
 
+//------------------------------------------------SPI.H
+
+#define AUX_SPI0_CNTL0_REG	0x20215080
+#define AUX_SPI0_CNTL1_REG	0x20215084
+#define AUX_SPI0_STAT_REG	0x20215088
+#define AUX_SPI0_IO_REG		0x20215090
+#define AUX_SPI0_PEEK_REG	0x20215094
+
+void spi_install();
 #endif
