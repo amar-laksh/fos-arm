@@ -50,9 +50,10 @@ void pinMode(
 		PUT32(SEL,ra);
 	}
 	else if(state == 0 || state == INPUT){
+		
 		ra=GET32(SEL);
 		ra&=~(7<<offset);
-		ra|=0<<offset;
+		ra |= (0<<offset);
 		PUT32(SEL,ra);
 	}
 	else if(state == 4 || state == ALT0){
@@ -101,7 +102,7 @@ void digitalWrite	(
 {
 	int value;
 	if(gpio_pin < 32)
-		value = 1<<(32 - gpio_pin);
+		value = 1<<(gpio_pin);
 	if(gpio_pin >= 32)
 		value = 1<<(gpio_pin - 32);
 
@@ -125,12 +126,15 @@ int digitalRead	(
 				)
 {
 	uint32_t a;
-	if(gpio_pin <= 31){
+	uint32_t value;
+	if(gpio_pin >= 0 && gpio_pin <= 31){
 		a = GET32(GPLEV0);
+		value = 1<<(gpio_pin);
 	}else{
 		a  = GET32(GPLEV1);
+		value = 1<<(gpio_pin - 32);
 	}
-	return (a & (1<<(32-gpio_pin)));
+	return (a & value);
 }
 
 
@@ -287,11 +291,7 @@ void pullUpDownWrite(
 					int value
 					)
 {
-	int a;
-	a = GET32(GPPUD);
-	a &= ~(3<<0);
-	a |= (value);
-	PUT32(GPPUD, a);
+	PUT32(GPPUD, value);
 }
 
 void pullUpDownClockWrite	(
@@ -299,30 +299,30 @@ void pullUpDownClockWrite	(
 							, int value
 							)
 {
-	int a;
-	CHECK_ON_GPIO_PINS(GPPUDCLK0, GPPUDCLK1);
-	value = a;
-	CHECK_ON_GPIO_PINS_WRITE(GPPUDCLK0, GPPUDCLK1);
+	if(gpio_pin >= 0 && gpio_pin <= 31)
+		PUT32(GPPUDCLK0, value);
+	if(gpio_pin > 31 && gpio_pin <= 53)
+		PUT32(GPPUDCLK1, value);
 }
 
 
 void gpio_install(){
-	unsigned int ra;
+	//unsigned int ra;
 	pinMode(35, OUTPUT);
 	pinMode(47, OUTPUT);
-	pinMode(16, OUTPUT);
+	pinMode(24, OUTPUT);
 	// Testing leds ten times
 	for (int i = 0; i < 10; ++i){
 		digitalWrite(35, HIGH);
 		digitalWrite(47, LOW);
-		digitalWrite(16, HIGH);
-        for(ra=0;ra<0x100000;ra++) dummy(ra);
+		digitalWrite(24, LOW);
+        delay(0x200000);//for(ra=0;ra<0x100000;ra++) dummy(ra);
         digitalWrite(35, LOW);
         digitalWrite(47, HIGH);
-        digitalWrite(16, LOW);
-        for(ra=0;ra<0x100000;ra++) dummy(ra);
+       	digitalWrite(24, HIGH);
+        delay(0x200000);//for(ra=0;ra<0x100000;ra++) dummy(ra);
 	}
 	digitalWrite(35, LOW);
 	digitalWrite(47, LOW);
-	digitalWrite(16, LOW);
+	digitalWrite(24, LOW);
 }

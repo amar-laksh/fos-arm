@@ -4,7 +4,7 @@
 int kmain (uint32_t r0, uint32_t r1, uint32_t atags)
 {
 	lcd_install();
-	mini_uart_install();
+	//mini_uart_install();
 	(void) r0;
 	(void) r1;
 	(void) atags;
