@@ -96,7 +96,7 @@ void mini_uart_install()
 
     PUT32(AUX_MU_CNTL_REG,3);
     int i;
-    mini_uart_puts("----THIS IS GARBAGE---\n\033[2J");
+    mini_uart_puts("----THIS IS GARBAGE---\n\033c");
     for(i = 0;i < 10; i++){
         mini_uart_puts("Hello World from the mini UART!!\n");
     }
