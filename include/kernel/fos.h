@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <sys/va_list.h>
 #define ARM_TIMER_LOD 0x2000B400
 #define ARM_TIMER_VAL 0x2000B404
 #define ARM_TIMER_CTL 0x2000B408
@@ -233,9 +234,15 @@ void gpio_install();
 #define UART_ITOP		0x20201088
 #define UART_TDR		0x2020108C
 
+void mini_uart_puts (
+                    char* s
+                    );
+
 void mini_uart_install();
 
 void uart_install();
+
+
 
 //------------------------------------------------LCD.H
 
@@ -250,4 +257,47 @@ void lcd_install();
 #define AUX_SPI0_PEEK_REG	0x20215094
 
 void spi_install();
+
+
+//------------------------------------------------STRING.H
+
+int32_t strlen  (
+                char* str
+                );
+
+//------------------------------------------------PRINT.H
+
+int kprintf	(
+			const char *fmt,
+			...
+	   		);
+
+int sprintf	(
+			const char *fmt,
+			...
+			);
+
+//------------------------------------------------MALLOC.H
+
+void *memset(
+			void *dest
+			, char val
+			, size_t count
+			);
+
+void * memcpy   (
+				void * restrict dest
+				, const void * restrict src
+				, size_t count
+				);
+
+void * memmove  (
+				void * restrict dest
+				, const void * restrict src
+				, size_t count
+				);
+
+
+
+
 #endif
