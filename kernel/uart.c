@@ -10,8 +10,19 @@
  * 5. Setup Data type
  */
 
+int32_t strlen  (
+                char* str
+                )
+{
+    int32_t len=0;
+    while (str[len++]);
+    return len;
+}
 
-void mini_uart_putc(unsigned char c){
+void mini_uart_putc (
+                    unsigned char c
+                    )
+{
 	while(1){
 		if(GET32(AUX_MU_LSR_REG)&0x20) break;
 	}
@@ -19,8 +30,20 @@ void mini_uart_putc(unsigned char c){
 
 }
 
+void mini_uart_puts (
+                    char* s
+                    )
+{
+    for(int i=0;i<strlen(s);i++)
+        mini_uart_putc(s[i]);
+}
 
-void uart_putc ( unsigned int c )
+
+
+
+void uart_putc  ( 
+                unsigned int c 
+                )
 {
     while(1)
     {
@@ -81,11 +104,8 @@ void mini_uart_install()
 
     PUT32(AUX_MU_CNTL_REG,3);
     int i;
-    for(i = 0;i < 10; i++)
-    {
-    	mini_uart_putc('a');
-        delay(0x100000);
-		mini_uart_putc('b');
-        delay(0x100000);
+    mini_uart_puts("----THIS IS GARBAGE---\n\033[2J");
+    for(i = 0;i < 10; i++){
+        mini_uart_puts("Hello World from the mini UART!!\n");
     }
 }
