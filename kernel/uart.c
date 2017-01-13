@@ -12,8 +12,8 @@
 
 
 void mini_uart_putc (
-                    unsigned char c
-                    )
+					unsigned char c
+					)
 {
 	while(1){
 		if(GET32(AUX_MU_LSR_REG)&0x20) break;
@@ -23,55 +23,63 @@ void mini_uart_putc (
 }
 
 void mini_uart_puts (
-                    char* s
-                    )
+					char* s
+					)
 {
-    for(int i=0;i<strlen(s);i++)
-        mini_uart_putc(s[i]);
+	for(int i=0;i<strlen(s);i++)
+		mini_uart_putc(s[i]);
 }
 
 
 
 
 void uart_putc  ( 
-                unsigned int c 
-                )
+				unsigned int c 
+				)
 {
-    while(1)
-    {
-        if((GET32(UART_FR)&0x20)==0) break;
-    }
-    PUT32(UART_DR,c);
+	while(1)
+	{
+		if((GET32(UART_FR)&0x20)==0) break;
+	}
+	PUT32(UART_DR,c);
 }
+
+
+void uart_puts (
+					char* s
+					)
+{
+	for(int i=0;i<strlen(s);i++)
+		uart_putc(s[i]);
+}
+
 
 void uart_install()
 {
 	unsigned int ra;
-    PUT32(UART_CR,0);
+	PUT32(UART_CR,0);
 
-    ra=GET32(GPFSEL1);
-    ra&=~(7<<12); //gpio14
-    ra|=4<<12;    //alt0
-    ra&=~(7<<15); //gpio15
-    ra|=4<<15;    //alt0
-    PUT32(GPFSEL1,ra);
+	ra=GET32(GPFSEL1);
+	ra&=~(7<<12); //gpio14
+	ra|=4<<12;    //alt0
+	ra&=~(7<<15); //gpio15
+	ra|=4<<15;    //alt0
+	PUT32(GPFSEL1,ra);
 
-    PUT32(GPPUD,0);
-    for(ra=0;ra<150;ra++) dummy(ra);
-    PUT32(GPPUDCLK0,(1<<14)|(1<<15));
-    for(ra=0;ra<150;ra++) dummy(ra);
-    PUT32(GPPUDCLK0,0);
+	PUT32(GPPUD,0);
+	for(ra=0;ra<150;ra++) dummy(ra);
+	PUT32(GPPUDCLK0,(1<<14)|(1<<15));
+	for(ra=0;ra<150;ra++) dummy(ra);
+	PUT32(GPPUDCLK0,0);
 
-    PUT32(UART_ICR,0x7FF);
-    PUT32(UART_IBRD,1);
-    PUT32(UART_FBRD,40);
-    PUT32(UART_LCRH,0x70);
-    PUT32(UART_CR,0x301);
-    while(1){
-    	uart_putc('a');
-    	delay(0x100000);
-    	uart_putc('b');
-    }
+	PUT32(UART_ICR,0x7FF);
+	PUT32(UART_IBRD,1);
+	PUT32(UART_FBRD,40);
+	PUT32(UART_LCRH,0x70);
+	PUT32(UART_CR,0x301);
+	uart_puts("----THIS IS GARBAGE---\n\033c");
+	uart_puts("Hello World from the mini UART!!\n");
+	uart.status = 0;
 }
 
 void mini_uart_install()
@@ -88,16 +96,14 @@ void mini_uart_install()
 
 	pinMode(14, ALT5);
 	PUT32(GPPUD, 0);
-	delay(150);
-    PUT32(GPPUDCLK0,(1<<14));
-    delay(150);
-    PUT32(GPPUD, 0);
-    PUT32(GPPUDCLK0,0);
+	delay_c(150);
+	PUT32(GPPUDCLK0,(1<<14));
+	delay_c(150);
+	PUT32(GPPUD, 0);
+	PUT32(GPPUDCLK0,0);
 
-    PUT32(AUX_MU_CNTL_REG,3);
-    int i;
-    mini_uart_puts("----THIS IS GARBAGE---\n\033c");
-    for(i = 0;i < 10; i++){
-        mini_uart_puts("Hello World from the mini UART!!\n");
-    }
+	PUT32(AUX_MU_CNTL_REG,3);
+	mini_uart_puts("----THIS IS GARBAGE---\n\033c");
+	mini_uart_puts("Hello World from the mini UART!!\n");
+	uart.status = 1;
 }

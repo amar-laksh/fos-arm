@@ -16,7 +16,10 @@
 //#define TIMEOUT 20000000
 #define TIMEOUT 2000000
 
-
+struct {
+	int8_t status;
+	int baud_rate;
+} uart;
 
 extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
@@ -26,10 +29,35 @@ extern void dummy ( unsigned int );
 /* Loop <delay> times in a way that the compiler won't optimize away. */
 static inline void delay(int32_t count)
 {
-	asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
-		 : "=r"(count): [count]"0"(count) : "cc");
+        count = count * 1048576;
+        asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+                 : "=r"(count): [count]"0"(count) : "cc");
 }
- 
+
+static inline void delay_c(int32_t count)
+{
+        asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+                 : "=r"(count): [count]"0"(count) : "cc");
+}
+
+
+//------------------------------------------------ATAGS.H
+
+#define ATAG_NONE		0x00000000
+#define ATAG_CORE		0x54410001
+#define ATAG_MEM		0x54410002
+#define ATAG_VIDEOTEXT	0x54410003
+#define ATAG_RAMDISK	0x54410004
+#define ATAG_INITRD2	0x54410005
+#define ATAG_SERIAL		0x54410006
+#define ATAG_REVISION	0x54410007
+#define ATAG_VIDEOLFB	0x54410008
+#define ATAG_CMDLINE	0x54410009
+#define ATAG_CMDLINE	0x54410009
+
+struct atag_cmdline {
+        char    cmdline[1];
+};
 
 //------------------------------------------------GPIO.H
 
@@ -235,8 +263,12 @@ void gpio_install();
 #define UART_TDR		0x2020108C
 
 void mini_uart_puts (
-                    char* s
-                    );
+					char* s
+					);
+
+void uart_puts (
+					char* s
+					);
 
 void mini_uart_install();
 
@@ -262,15 +294,15 @@ void spi_install();
 //------------------------------------------------STRING.H
 
 int32_t strlen  (
-                char* str
-                );
+				char* str
+				);
 
 //------------------------------------------------PRINT.H
 
 int kprintf	(
 			const char *fmt,
 			...
-	   		);
+			);
 
 int sprintf	(
 			const char *fmt,

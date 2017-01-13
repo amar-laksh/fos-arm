@@ -158,7 +158,10 @@ int sprintf	(
 	va_start(args, fmt);
 	int out = vasprintf(buf, fmt, args);
 	va_end(args);
-	mini_uart_puts(buf);
+	if(uart.status == 0)
+		uart_puts(buf);
+	else if(uart.status == 2)
+		mini_uart_puts(buf);
 	return out;
 }
 

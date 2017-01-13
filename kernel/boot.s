@@ -69,3 +69,10 @@ GET32:
 dummy:
     bx lr
 
+.globl MEMORYBARRIER
+MEMORYBARRIER:
+    mcr p15, 0, r3, c7, c5, 0
+    mcr p15, 0, r3, c7, c5, 6
+    mcr p15, 0, r3, c7, c10, 4
+    mcr p15, 0, r3, c7, c5, 4
+    mov pc, lr
