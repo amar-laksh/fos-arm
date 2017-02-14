@@ -53,7 +53,6 @@ static inline void delay_c(int32_t count)
 #define ATAG_REVISION	0x54410007
 #define ATAG_VIDEOLFB	0x54410008
 #define ATAG_CMDLINE	0x54410009
-#define ATAG_CMDLINE	0x54410009
 
 struct atag_cmdline {
         char    cmdline[1];
@@ -282,11 +281,12 @@ void lcd_install();
 
 //------------------------------------------------SPI.H
 
-#define AUX_SPI0_CNTL0_REG	0x20215080
-#define AUX_SPI0_CNTL1_REG	0x20215084
-#define AUX_SPI0_STAT_REG	0x20215088
-#define AUX_SPI0_IO_REG		0x20215090
-#define AUX_SPI0_PEEK_REG	0x20215094
+#define SPI_CS			0X2004000
+#define SPI_FIFO		0X2004004
+#define SPI_CLK			0X2004008
+#define SPI_DLEN		0X200400C
+#define SPI_LTOH		0X2004010
+#define SPI_DC			0X2004014
 
 void spi_install();
 
