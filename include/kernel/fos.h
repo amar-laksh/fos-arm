@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <sys/va_list.h>
+
+#define SYSTEMCLK 0x3000000
+
 #define ARM_TIMER_LOD 0x2000B400
 #define ARM_TIMER_VAL 0x2000B404
 #define ARM_TIMER_CTL 0x2000B408
@@ -288,7 +291,61 @@ void lcd_install();
 #define SPI_LTOH		0X2004010
 #define SPI_DC			0X2004014
 
-void spi_install();
+enum SPI_SPEED
+{
+	SPI_CLOCK_DIV2 = 2,
+	SPI_CLOCK_DIV4 = 4,
+	SPI_CLOCK_DIV8 = 8,
+	SPI_CLOCK_DIV16 = 16,
+	SPI_CLOCK_DIV32 = 32,
+	SPI_CLOCK_DIV64 = 64
+};
+
+enum BYTE_ORDER
+{
+	MSBFIRST,
+	LSBFIRST
+};
+
+enum SPI_MODE
+{
+	SPI_MODE0,
+	SPI_MODE1,
+	SPI_MODE2,
+	SPI_MODE3
+};
+
+enum CE
+{
+	SPI_CE0 = 8,
+	SPI_CE1 = 7
+};
+
+void spi_install(
+				enum SPI_SPEED speed
+				, enum BYTE_ORDER order 
+				, enum SPI_MODE mode
+				);
+
+
+
+void spi_putc	(
+				unsigned char c
+				);
+
+unsigned char spi_getc();
+
+
+//------------------------------------------------RC522.H
+
+void rc522_write_register	(
+							uint8_t reg
+							,uint8_t value
+							);
+
+uint8_t rc522_read_register(
+							uint8_t reg
+							);
 
 
 //------------------------------------------------STRING.H

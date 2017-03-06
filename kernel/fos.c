@@ -15,9 +15,10 @@ int kmain 	(
 	sprintf("Now I am gonna start to try to communicate with the rfid chip\n");
 	while(1){
 		sprintf("HELLO\n");
-		mini_uart_puts("THIS IS A NICE VALUE\n");
+		uint8_t val = rc522_read_register('\x2E');
+		sprintf("THIS IS A NICE VALUE:%x\n", val);
 	}
-	spi_install();
+
 	//lcd_install();
 	return(0);
 }
