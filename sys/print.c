@@ -160,7 +160,7 @@ int sprintf	(
 	va_end(args);
 	if(uart.status == 0)
 		uart_puts(buf);
-	else if(uart.status == 2)
+	else if(uart.status == 1)
 		mini_uart_puts(buf);
 	return out;
 }

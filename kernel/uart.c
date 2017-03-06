@@ -78,7 +78,7 @@ void uart_install()
 	PUT32(UART_LCRH,0x70);
 	PUT32(UART_CR,0x301);
 	uart_puts("----THIS IS GARBAGE---\n\033c");
-	uart_puts("Hello World from the mini UART!!\n");
+	uart_puts("Hello World from the UART!!\n");
 	uart.status = 0;
 }
 

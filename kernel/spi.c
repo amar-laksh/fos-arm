@@ -43,5 +43,8 @@ void spi_install()
 	PUT32(SPI_CLK,0);
 
 
+	//Testing SPI by sending data
+	
+	
 
 }

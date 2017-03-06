@@ -25,7 +25,7 @@ LDFLAGS = -T linker.ld -o fos.elf -ffreestanding -O2 -nostdlib
 OBJCOPY = /root/ARM-CROSS/bin/arm-eabi-objcopy
 
 clean:
-	rm -rf *. ../drivers/*.o ../mm/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./*.iso ./*.elf
+	rm -rf *. ../drivers/*.o ../mm/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./*.iso ./*.elf ./*.img
 
 all : kernel.bin clean
 
