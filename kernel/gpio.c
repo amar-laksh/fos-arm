@@ -10,6 +10,44 @@
 										else{\
 											PUT32(SEL1 \
 											, value<<(gpio_pin-32));}
+
+int getpinMode	(
+				int gpio_pin
+				)
+{
+	int value=0;
+	int8_t offset=21;
+	int SEL;
+	switch((gpio_pin%10)){
+				case 0: offset = 0; break;
+				case 1: offset = 3; break;
+				case 2: offset = 6; break;
+				case 3: offset = 9; break;
+				case 4: offset = 12; break;
+				case 5: offset = 15; break;
+				case 6: offset = 18; break;
+				case 7: offset = 21; break;
+				case 8: offset = 24; break;
+				case 9: offset = 27; break;
+			}
+	if(gpio_pin >= 0 && gpio_pin <= 9)
+		SEL = GPFSEL0;
+	if(gpio_pin >= 10 && gpio_pin <= 19)
+		SEL = GPFSEL1;
+	if(gpio_pin >= 20 && gpio_pin <= 29)
+		SEL = GPFSEL2;
+	if(gpio_pin >= 30 && gpio_pin <= 39)
+		SEL = GPFSEL3;
+	if(gpio_pin >= 40 && gpio_pin <= 49)
+		SEL = GPFSEL4;
+	if(gpio_pin >= 50 && gpio_pin <= 53)
+		SEL = GPFSEL5;
+	value = GET32(SEL);
+	return value & (7<<offset);
+}
+
+
+
 void pinMode(
 			int gpio_pin
 			, int state
@@ -49,7 +87,7 @@ void pinMode(
 		ra|=1<<offset;
 		PUT32(SEL,ra);
 	}
-	else if(state == 0 || state == INPUT){		
+	else if(state == 0 || state == INPUT){
 		ra=GET32(SEL);
 		ra&=~(7<<offset);
 		ra |= (0<<offset);
@@ -311,11 +349,10 @@ void pullUpDownClockWrite	(
 
 
 void gpio_install(){
-	//unsigned int ra;
 	pinMode(35, OUTPUT);
 	pinMode(47, OUTPUT);
 	pinMode(24, OUTPUT);
-	// Testing leds ten times
+	// Testing LEDs on the raspberry ten times
 	for (int i = 0; i < 10; ++i){
 		digitalWrite(35, HIGH);
 		digitalWrite(47, LOW);
@@ -329,4 +366,21 @@ void gpio_install(){
 	digitalWrite(35, LOW);
 	digitalWrite(47, LOW);
 	digitalWrite(24, LOW);
+
+}
+
+
+void gpio_dump(){
+	pinMode(30, ALT0);
+	pinMode(31, ALT1);
+	pinMode(32, ALT2);
+	pinMode(33, ALT3);
+	pinMode(34, ALT4);
+	pinMode(35, ALT5);
+	pinMode(36, INPUT);
+	pinMode(37, OUTPUT);
+
+	for (int i = 0; i <52 ; ++i){
+		sprintf("The GPIO %d is set to: %d\n", i, getpinMode(i));
+	}
 }

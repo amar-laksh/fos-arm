@@ -228,6 +228,7 @@ void pullUpDownClockWrite	(
 
 void gpio_install();
 
+void gpio_dump();
 //------------------------------------------------UART.H
 
 #define AUX_IRQ 		0x20215000
@@ -264,6 +265,14 @@ void gpio_install();
 #define UART_ITOP		0x20201088
 #define UART_TDR		0x2020108C
 
+unsigned char mini_uart_getc ();
+
+
+void mini_uart_gets (
+					char* buf
+					);
+
+
 void mini_uart_puts (
 					char* s
 					);
@@ -290,6 +299,8 @@ void lcd_install();
 #define SPI_DLEN		0X200400C
 #define SPI_LTOH		0X2004010
 #define SPI_DC			0X2004014
+
+#define SPI_RST 17
 
 enum SPI_SPEED
 {
@@ -321,9 +332,9 @@ enum CE
 	SPI_CE1 = 7
 };
 
+
 void spi_install(
 				enum SPI_SPEED speed
-				, enum BYTE_ORDER order 
 				, enum SPI_MODE mode
 				);
 
@@ -338,6 +349,8 @@ unsigned char spi_getc();
 
 //------------------------------------------------RC522.H
 
+void rc522_install();
+
 void rc522_write_register	(
 							uint8_t reg
 							,uint8_t value
@@ -349,6 +362,11 @@ uint8_t rc522_read_register(
 
 
 //------------------------------------------------STRING.H
+
+int8_t equals	(
+				char* first
+				, char* second
+				);
 
 int32_t strlen  (
 				char* str

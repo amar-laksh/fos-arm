@@ -22,6 +22,29 @@ void mini_uart_putc (
 
 }
 
+
+unsigned char mini_uart_getc ()
+{
+	while(1){
+		if(GET32(AUX_MU_LSR_REG)&0x01) break;
+	}
+	return GET32(AUX_MU_IO_REG);
+
+}
+
+
+void mini_uart_gets (char* buf)
+{
+	unsigned char ch='0';
+	int i=0;
+	while((ch = mini_uart_getc()) != 0xa){
+		*(buf+i) = ch;
+		i++;
+	}
+	*(buf+i) = '\0';
+}
+
+
 void mini_uart_puts (
 					char* s
 					)
@@ -101,6 +124,15 @@ void mini_uart_install()
 	delay_c(150);
 	PUT32(GPPUD, 0);
 	PUT32(GPPUDCLK0,0);
+
+	pinMode(15, ALT5);
+	PUT32(GPPUD, 0);
+	delay_c(150);
+	PUT32(GPPUDCLK0,(1<<15));
+	delay_c(150);
+	PUT32(GPPUD, 0);
+	PUT32(GPPUDCLK0,0);
+
 
 	PUT32(AUX_MU_CNTL_REG,3);
 	mini_uart_puts("----THIS IS GARBAGE---\n\033c");

@@ -8,44 +8,46 @@
  * 5. if DONE == 1 && No Data? set TA = 0
  * 6. if RXR = 1? Read Data
  *
- * Steps(Polled)-
- * 1. 
  */
 
-
-int DATA_CYCLE = 0;
 void spi_putc	(
 				unsigned char c
 				)
 {
-	while(1){
-		if((GET32(SPI_CS) & 0x10000) == 1) break;
+	PUT32(SPI_CS,(1<<7));
+	while((GET32(SPI_CS) & 0x40000) != 0){
+		PUT32(SPI_FIFO,c);
 	}
-	PUT32(SPI_FIFO,c);
+	PUT32(SPI_CS,(0<<7));
 }
 
 
 unsigned char spi_getc()
 {
-	while(1){
-		if((GET32(SPI_CS) & 0x80000) == 1) break;
+	PUT32(SPI_CS,(1<<7));
+	unsigned char fifo_byte = 0x0;
+	while((GET32(SPI_CS) & 0x20000) != 0){
+			fifo_byte = GET32(SPI_FIFO);
 	}
-	return GET32(SPI_FIFO);
+	PUT32(SPI_CS, (0<<7));
+	return fifo_byte;
 }
 
 
 void spi_install(
 				enum SPI_SPEED speed
-				, enum BYTE_ORDER order 
 				, enum SPI_MODE mode
 				)
 {
+	pinMode(11, ALT0);
+
+	pinMode(10, ALT0);
+
+	pinMode(9, ALT0);
 
 	if(mode == SPI_MODE0){
 		PUT32(SPI_CS, (0<<2));
 		PUT32(SPI_CS, (0<<3));
-
-
 	}
 	else if(mode == SPI_MODE1){
 		PUT32(SPI_CS, (1<<2));
@@ -61,39 +63,5 @@ void spi_install(
 		PUT32(SPI_CS, (1<<2));
 		PUT32(SPI_CS, (1<<3));
 	}
-
-	PUT32(SPI_CS, (1<<7));
-
-	pinMode(8, ALT0);
-	PUT32(GPPUD, 0);
-	delay_c(150);
-	PUT32(GPPUDCLK0,(1<<8));
-	delay_c(150);
-	PUT32(GPPUD, 0);
-	PUT32(GPPUDCLK0,0);
-
-
-	pinMode(11, ALT0);
-	PUT32(GPPUD, 0);
-	delay_c(150);
-	PUT32(GPPUDCLK0,(1<<11));
-	delay_c(150);
-	PUT32(GPPUD, 0);
-	PUT32(GPPUDCLK0,0);
-
-	pinMode(10, ALT0);
-	PUT32(GPPUD, 0);
-	delay_c(150);
-	PUT32(GPPUDCLK0,(1<<10));
-	delay_c(150);
-	PUT32(GPPUD, 0);
-	PUT32(GPPUDCLK0,0);
-
-	pinMode(9, ALT0);
-	PUT32(GPPUD, 0);
-	delay_c(150);
-	PUT32(GPPUDCLK0,(1<<9));
-	delay_c(150);
-	PUT32(GPPUD, 0);
-	PUT32(GPPUDCLK0,0);
+	PUT32(SPI_CLK, speed);
 }
